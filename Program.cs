@@ -1,7 +1,11 @@
+using AzureTestingWebApplication.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddTransient<IProductServices, ProductServices>();
 
 var app = builder.Build();
 
