@@ -1,5 +1,6 @@
 ﻿using AzureTestingWebApplication.Models;
 using System.Data.SqlClient;
+using Microsoft.FeatureManagement;
 
 namespace AzureTestingWebApplication.Services;
 
@@ -12,22 +13,23 @@ public class ProductServices : IProductServices
 
     //Instead above we can use IConfiguation to get connection string from appsettings.json or from Azure web app configuration
     private readonly IConfiguration _configuration;
+    private readonly IFeatureManager _featureManager;
 
-    public ProductServices(IConfiguration configuration)
+    public ProductServices(IConfiguration configuration, IFeatureManager featureManager)
     {
         _configuration = configuration;
+        _featureManager = featureManager;
     }
 
-    private SqlConnection GetConnection()
+    public async Task<bool> IsBeta()
     {
-        //var _sqlbuilder = new SqlConnectionStringBuilder();
-        //_sqlbuilder.DataSource = db_source;
-        //_sqlbuilder.UserID = db_user;
-        //_sqlbuilder.Password = db_password;
-        //_sqlbuilder.InitialCatalog = db_database;
-        //return new SqlConnection(_configuration.GetConnectionString("SQLConnection1"));
-        // After giving connection string in "AppConfiguration" it is injected directly to IConfiguration after installing nuget package microsoft.extensions.configuration.azureappconfiguration 6.0.0
-        return new SqlConnection(_configuration["SQLConnection1"]);
+        // "beta" is the Feature flag name given in the "Feature Manager".
+
+        //if (await _featureManager.IsEnabledAsync("beta"))
+        //    return true;
+        //else
+        //    return false;
+        return await _featureManager.IsEnabledAsync("beta");
     }
 
     public List<Product> GetProducts()
@@ -53,5 +55,17 @@ public class ProductServices : IProductServices
             }
         }
         return products;
+    }
+
+    private SqlConnection GetConnection()
+    {
+        //var _sqlbuilder = new SqlConnectionStringBuilder();
+        //_sqlbuilder.DataSource = db_source;
+        //_sqlbuilder.UserID = db_user;
+        //_sqlbuilder.Password = db_password;
+        //_sqlbuilder.InitialCatalog = db_database;
+        //return new SqlConnection(_configuration.GetConnectionString("SQLConnection1"));
+        // After giving connection string in "AppConfiguration" it is injected directly to IConfiguration after installing nuget package microsoft.extensions.configuration.azureappconfiguration 6.0.0
+        return new SqlConnection(_configuration["SQLConnection1"]);
     }
 }

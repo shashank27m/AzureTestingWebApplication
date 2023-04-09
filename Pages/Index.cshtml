@@ -9,6 +9,11 @@
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
 <br>
+@if (Model.IsBeta)
+{
+    <h1 class="display-4">This is a Beta Application</h1>
+    <br>
+}
 <div class="text-center">
     <h1 class="display-4">This is a list of Products</h1>
     <table class="table table-bordered">

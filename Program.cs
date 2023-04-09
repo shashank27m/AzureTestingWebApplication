@@ -1,4 +1,5 @@
 using AzureTestingWebApplication.Services;
+using Microsoft.FeatureManagement;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,12 @@ var connectionstring = "Endpoint=https://azurewebappconfig.azconfig.io;Id=SuCt-l
 //    builder.AddAzureAppConfiguration(connectionstring);
 //});
 //Use below instead of above one
-builder.Configuration.AddAzureAppConfiguration(connectionstring);
+//builder.Configuration.AddAzureAppConfiguration(connectionstring);
+
+//To use "AppConfiguration" service along with feature flags in "Feature Manager" in current "AppConfiguration"(under operations). To use "Feature Manager", install nuget package microsoft.featuremanagement.aspnetcore\2.5.1\
+builder.Configuration.AddAzureAppConfiguration(options=>options.Connect(connectionstring).UseFeatureFlags());
+//Add this, to use feature flag service.
+builder.Services.AddFeatureManagement();
 
 builder.Services.AddTransient<IProductServices, ProductServices>();
 

@@ -9,6 +9,7 @@ namespace AzureTestingWebApplication.Pages
     {
         //private readonly ILogger<IndexModel> _logger;
         public List<Product> Products;
+        public bool IsBeta;
         private readonly IProductServices _services;
 
         public IndexModel(/*ILogger<IndexModel> logger*/IProductServices services)
@@ -19,6 +20,7 @@ namespace AzureTestingWebApplication.Pages
 
         public void OnGet()
         {
+            IsBeta = _services.IsBeta().Result;
             Products = _services.GetProducts();
         }
 
