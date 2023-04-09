@@ -25,7 +25,7 @@ public class ProductServices : IProductServices
         //_sqlbuilder.UserID = db_user;
         //_sqlbuilder.Password = db_password;
         //_sqlbuilder.InitialCatalog = db_database;
-        return new SqlConnection(_configuration.GetConnectionString("SQLConnection"));
+        return new SqlConnection(_configuration.GetConnectionString("SQLConnection1"));
     }
 
     public List<Product> GetProducts()
