@@ -25,7 +25,9 @@ public class ProductServices : IProductServices
         //_sqlbuilder.UserID = db_user;
         //_sqlbuilder.Password = db_password;
         //_sqlbuilder.InitialCatalog = db_database;
-        return new SqlConnection(_configuration.GetConnectionString("SQLConnection1"));
+        //return new SqlConnection(_configuration.GetConnectionString("SQLConnection1"));
+        // After giving connection string in "AppConfiguration" it is injected directly to IConfiguration after installing nuget package microsoft.extensions.configuration.azureappconfiguration 6.0.0
+        return new SqlConnection(_configuration["SQLConnection1"]);
     }
 
     public List<Product> GetProducts()
