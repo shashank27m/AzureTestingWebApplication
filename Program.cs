@@ -18,6 +18,7 @@ var connectionstring = "Endpoint=https://azurewebappconfig.azconfig.io;Id=SuCt-l
 //builder.Configuration.AddAzureAppConfiguration(connectionstring);
 
 //To use "AppConfiguration" service along with feature flags in "Feature Manager" in current "AppConfiguration"(under operations). To use "Feature Manager", install nuget package microsoft.featuremanagement.aspnetcore\2.5.1\
+//We can also use this feature flags on controller level also for that see documentation https://learn.microsoft.com/en-us/azure/azure-app-configuration/use-feature-flags-dotnet-core?tabs=core5x.
 builder.Configuration.AddAzureAppConfiguration(options=>options.Connect(connectionstring).UseFeatureFlags());
 //Add this, to use feature flag service.
 builder.Services.AddFeatureManagement();
