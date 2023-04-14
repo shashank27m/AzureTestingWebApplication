@@ -6,8 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-//After creating "AppConfiguration" service in azure resource and giving key value pair of connection string in "Configuration Explorer", We take this key from "Access Keys"
-var connectionstring = "Endpoint=https://azurewebappconfig.azconfig.io;Id=SuCt-l0-s0:79vrltvHAU1Na3t6v3rz;Secret=Z3Rjtl2Hss32lQwZlfALagsW1A1fuTsnpsiaxCLFVsA=";
+//After creating "AppConfiguration" service in azure resource and giving key value pair of connection string in "Configuration Explorer", We take this key from settings --> "Access Keys"
+var connectionstring = "Endpoint=https://azurewebappconfig.azconfig.io;Id=6DJT-l1-s0:E2An4Tw1Cq5miCCIJZOQ;Secret=r2Ks7+LN32M4dNfvyBXkvdBj14uhk8WhsPZHqkUzNiM=";
 
 // After giving connection string in "AppConfiguration" to inject it to IConfiguration, install nuget package microsoft.extensions.configuration.azureappconfiguration 6.0.0 and use below code.
 //builder.Host.ConfigureAppConfiguration(builder =>

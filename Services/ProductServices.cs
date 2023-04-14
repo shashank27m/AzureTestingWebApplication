@@ -1,6 +1,7 @@
 ﻿using AzureTestingWebApplication.Models;
 using System.Data.SqlClient;
 using Microsoft.FeatureManagement;
+using System.Text.Json;
 
 namespace AzureTestingWebApplication.Services;
 
@@ -35,6 +36,20 @@ public class ProductServices : IProductServices
     public List<Product> GetProducts()
     {
         List<Product> products = new List<Product>();
+
+        //If mentioned in appsettings.
+        if (bool.Parse(_configuration["IsFunctionsEnabled"]))
+        {
+            return GetProductsFromFunction().Result;
+        }
+
+        ////If Feature flag is enabled.
+        //if (_featureManager.IsEnabledAsync("IsFunctionsEnabled").Result)
+        //{
+        //    return GetProductsFromFunction().Result;
+        //}
+            
+
         using (var conn = GetConnection())
         {
             string sqlstatement = "select * from Products";
@@ -57,6 +72,17 @@ public class ProductServices : IProductServices
         return products;
     }
 
+    private async Task<List<Product>> GetProductsFromFunction()
+    {
+        string functionURL = "https://azuresamplefunction.azurewebsites.net/api/GetProducts?code=Ap49E3tcWFtCbYlHlgGUliG-TbdnT0zybfbZ_yiC55ozAzFuiuuLgg==";
+        using (HttpClient httpClient = new HttpClient())
+        {
+            HttpResponseMessage response = await httpClient.GetAsync(functionURL);
+            string content = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<List<Product>>(content);
+        }
+    }
+
     private SqlConnection GetConnection()
     {
         //var _sqlbuilder = new SqlConnectionStringBuilder();
@@ -64,8 +90,13 @@ public class ProductServices : IProductServices
         //_sqlbuilder.UserID = db_user;
         //_sqlbuilder.Password = db_password;
         //_sqlbuilder.InitialCatalog = db_database;
+        //return new SqlConnection(_sqlbuilder.ConnectionString);
+
+        //When we are connecting with WebApp --> Settings --> Configuration --> Connection Strings
         //return new SqlConnection(_configuration.GetConnectionString("SQLConnection1"));
+
         // After giving connection string in "AppConfiguration" it is injected directly to IConfiguration after installing nuget package microsoft.extensions.configuration.azureappconfiguration 6.0.0
         return new SqlConnection(_configuration["SQLConnection1"]);
     }
+
 }
